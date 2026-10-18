@@ -1,190 +1,103 @@
 <!doctype html>
-<html lang="pt-BR">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<meta name="theme-color" content="#10151b">
-<title>Fábrica de Areia — Pixel Factory</title>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no"><meta name="theme-color" content="#101820"><title>Fábrica de Areia — Explorador 2D</title>
 <style>
-:root{color-scheme:dark;--bg:#10151b;--panel:#1a222b;--panel2:#222d37;--line:#35424e;--muted:#a3b0ba;--gold:#f5c45e;--mint:#76d8b2;--text:#edf2f5}
-*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font:14px/1.4 system-ui,-apple-system,Segoe UI,sans-serif}body{overflow:hidden}button{font:inherit;color:inherit;background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:9px 11px;cursor:pointer;touch-action:manipulation}button:hover{border-color:#748896}button:disabled{opacity:.4;cursor:not-allowed}.app{height:100dvh;display:grid;grid-template-rows:auto 1fr auto;gap:9px;padding:10px;max-width:1800px;margin:auto}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.brand{display:flex;align-items:center;gap:10px}.logo{width:38px;height:38px;display:grid;place-items:center;background:linear-gradient(145deg,#f5c45e,#c87938);color:#202329;border-radius:10px;font-size:22px;font-weight:900}.brand h1{font-size:17px;line-height:1.1;margin:0}.brand p{margin:4px 0 0;color:var(--muted);font-size:12px}.stats{display:flex;gap:7px;flex-wrap:wrap}.stat{background:var(--panel);border:1px solid var(--line);border-radius:9px;padding:7px 10px;min-width:76px}.stat small{display:block;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.08em}.stat strong{font-size:16px}.layout{min-height:0;display:grid;grid-template-columns:190px minmax(0,1fr) 230px;gap:9px}.panel{min-height:0;background:var(--panel);border:1px solid var(--line);border-radius:11px;overflow:auto}.panel-head{position:sticky;top:0;z-index:2;background:var(--panel);padding:12px 12px 8px;border-bottom:1px solid #2c3741}.panel-head h2{font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:#dce4e9;margin:0}.panel-body{padding:10px;display:grid;gap:8px}.tool{width:100%;display:flex;align-items:center;gap:9px;text-align:left;background:#202a33}.tool.active{border-color:var(--gold);background:#383124;box-shadow:inset 3px 0 var(--gold)}.tool-icon{width:28px;height:28px;border-radius:7px;display:grid;place-items:center;background:#111820;font-size:17px;flex:none}.tool span:nth-child(2){min-width:0;flex:1}.tool b{display:block;font-size:12px}.tool small{display:block;font-size:10px;color:var(--muted);margin-top:2px}.key{font-size:10px;color:var(--muted);border:1px solid #4b5863;border-radius:4px;padding:1px 4px}.center{min-width:0;min-height:0;display:grid;grid-template-rows:minmax(0,1fr) auto;gap:8px}.world-wrap{position:relative;min-height:0;overflow:hidden;background:#0a1016;border:1px solid #35424e;border-radius:11px}.world-wrap canvas{display:block;width:100%;height:100%;image-rendering:pixelated;touch-action:none;cursor:crosshair}.overlay{position:absolute;left:10px;top:10px;display:flex;gap:6px;flex-wrap:wrap;pointer-events:none}.pill{background:#101820d9;border:1px solid #53616b;border-radius:6px;padding:5px 8px;font-size:11px;color:#d8e1e7}.pill b{color:var(--gold)}.world-controls{position:absolute;right:9px;top:9px;display:flex;gap:5px}.world-controls button{padding:6px 9px;background:#121a22e8}.hint{background:#18212a;border:1px solid var(--line);border-radius:9px;padding:9px 12px;color:#c2ccd3;font-size:12px;display:flex;gap:8px;align-items:flex-start}.hint strong{color:var(--gold)}.tabs{display:flex;gap:5px;flex-wrap:wrap}.tab{flex:1;padding:7px 5px;font-size:11px}.tab.active{border-color:var(--mint);background:#203a35}.machine-card{border:1px solid #34414b;border-radius:8px;padding:9px;background:#202a33}.machine-card h3{margin:0 0 3px;font-size:12px}.machine-card p{margin:0 0 7px;color:var(--muted);font-size:11px}.machine-card button{width:100%;font-size:11px;padding:7px}.machine-card .cost{color:var(--gold);font-weight:700}.section-label{font-size:10px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin:5px 0 0}.feed{font-size:11px;color:#c1ccd4;display:grid;gap:6px}.feed div{border-left:2px solid #4e6874;padding:3px 0 3px 8px}.feed .good{border-color:var(--mint)}.feed .warn{border-color:var(--gold)}.bottom{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;color:var(--muted);font-size:11px;padding:0 3px}.bottom kbd{background:#202a33;border:1px solid #394650;border-radius:4px;padding:1px 5px;color:#dce4e9}.mobile-controls{display:none;gap:6px}.mobile-controls button{flex:1;min-height:42px}.empty{color:var(--muted);font-size:11px;line-height:1.5}.small-row{display:flex;gap:6px}.small-row button{flex:1;font-size:11px}.divider{height:1px;background:#34414b;margin:3px 0}
-@media(max-width:1000px){.layout{grid-template-columns:155px minmax(0,1fr)}.right-panel{display:none}.app{padding:7px;gap:7px}.stats .stat{min-width:62px;padding:6px 8px}.stat strong{font-size:14px}}
-@media(max-width:620px){body{overflow:hidden}.app{padding:5px;gap:5px}.top{gap:6px}.brand h1{font-size:14px}.brand p{font-size:10px}.logo{width:32px;height:32px}.stats{gap:4px}.stat{min-width:51px;padding:4px 6px}.stat small{font-size:8px}.stat strong{font-size:12px}.layout{grid-template-columns:1fr;grid-template-rows:minmax(0,1fr);gap:5px}.left-panel{position:absolute;z-index:5;left:5px;top:84px;width:132px;max-height:44%;background:#172029f5;box-shadow:0 8px 30px #0008}.right-panel.show-mobile{display:block;position:absolute;z-index:6;right:5px;top:84px;width:min(220px,58vw);max-height:50%;background:#172029f7;box-shadow:0 8px 30px #0008}.left-panel .panel-head{padding:8px}.left-panel .panel-body{padding:6px;gap:5px}.tool{padding:5px;gap:6px}.tool-icon{width:24px;height:24px;font-size:14px}.tool b{font-size:10px}.tool small{font-size:9px}.center{grid-template-rows:minmax(0,1fr) auto}.hint{font-size:10px;padding:7px 9px;margin-left:0}.mobile-controls{display:flex}.bottom{font-size:9px}.world-wrap{border-radius:8px}.overlay{left:5px;top:5px}.pill{font-size:9px;padding:3px 5px}.world-controls{right:4px;top:4px}.world-controls button{font-size:10px;padding:5px}.hide-mobile{display:none!important}}
-</style>
-</head>
-<body>
-<div class="app">
-<header class="top">
- <div class="brand"><div class="logo">F</div><div><h1>FÁBRICA DE AREIA</h1><p>Sandbox de materiais · física + automação</p></div></div>
- <div class="stats">
-  <div class="stat"><small>Ouro</small><strong id="gold">0</strong></div>
-  <div class="stat"><small>Areia molhada</small><strong id="wet">0</strong></div>
-  <div class="stat"><small>Resíduo</small><strong id="residue">0</strong></div>
-  <div class="stat"><small>Produzido</small><strong id="made">0</strong></div>
- </div>
-</header>
-<main class="layout">
- <aside class="panel left-panel">
-  <div class="panel-head"><h2>Ferramentas</h2></div>
-  <div class="panel-body" id="tools">
-   <button class="tool active" data-tool="dig"><span class="tool-icon">⛏️</span><span><b>Escavar</b><small>Areia e rocha</small></span><span class="key">1</span></button>
-   <button class="tool" data-tool="sand"><span class="tool-icon">🟨</span><span><b>Areia</b><small>Material granular</small></span><span class="key">2</span></button>
-   <button class="tool" data-tool="water"><span class="tool-icon">💧</span><span><b>Água</b><small>Molha a areia</small></span><span class="key">3</span></button>
-   <button class="tool" data-tool="grab"><span class="tool-icon">🧲</span><span><b>Coletar</b><small>Recolher ouro</small></span><span class="key">4</span></button>
-   <div class="divider"></div>
-   <p class="section-label">Construção</p>
-   <button class="tool" data-tool="shaker"><span class="tool-icon">▦</span><span><b>Shaker</b><small>Separador inicial</small></span><span class="key">5</span></button>
-   <button class="tool" data-tool="belt"><span class="tool-icon">⇢</span><span><b>Esteira</b><small>Move sólidos</small></span><span class="key">6</span></button>
-   <button class="tool" data-tool="burner"><span class="tool-icon">🔥</span><span><b>Queimador</b><small>Refina resíduo</small></span><span class="key">7</span></button>
-   <button class="tool" data-tool="press"><span class="tool-icon">▤</span><span><b>Prensa</b><small>Queda alta necessária</small></span><span class="key">8</span></button>
-   <button class="tool" data-tool="erase"><span class="tool-icon">🧹</span><span><b>Remover</b><small>Apagar construção</small></span><span class="key">9</span></button>
-  </div>
- </aside>
- <section class="center">
-  <div class="world-wrap" id="worldWrap">
-   <canvas id="world" aria-label="Mundo de areia interativo"></canvas>
-   <div class="overlay"><span class="pill">FERRAMENTA: <b id="activeName">Escavar</b></span><span class="pill" id="coords">x 0 · y 0</span></div>
-   <div class="world-controls"><button id="pause">Ⅱ Pausar</button><button id="reset">↻ Novo mundo</button></div>
-  </div>
-  <div class="hint"><span>ⓘ</span><div id="hintText"><strong>Comece aqui:</strong> misture areia e água; coloque areia molhada sobre um Shaker. Ouro atravessa por baixo, resíduo precisa de espaço para sair pelo lado.</div></div>
-  <div class="mobile-controls"><button id="toggleTools">☷ Ferramentas</button><button id="toggleResearch">⚙ Pesquisa</button><button id="mobileDig">⛏ Escavar</button><button id="mobileWater">💧 Água</button><button id="mobileGrab">🧲 Coletar</button></div>
- </section>
- <aside class="panel right-panel">
-  <div class="panel-head"><h2>Pesquisa & fábrica</h2></div>
-  <div class="panel-body">
-   <div class="machine-card"><h3>▦ Shaker</h3><p>Areia molhada vira 1 resíduo e tem 25% de chance de gerar ouro.</p><button data-buy="shaker">Desbloquear · <span class="cost">20 ouro</span></button></div>
-   <div class="machine-card"><h3>⇢ Logística</h3><p>Desbloqueia esteiras para transportar sólidos.</p><button data-buy="belt">Desbloquear · <span class="cost">30 ouro</span></button></div>
-   <div class="machine-card"><h3>🔥 Refinamento</h3><p>Desbloqueia queimador e prensa cinética.</p><button data-buy="refine">Desbloquear · <span class="cost">50 ouro</span></button></div>
-   <div class="divider"></div><p class="section-label">Estado da linha</p><div class="feed" id="feed"><div>Fábrica inicializada. Procure água na superfície.</div></div>
-   <div class="divider"></div><p class="section-label">Regras do material</p><p class="empty">• Água + areia → 2 areia molhada.<br>• Shaker: resíduo garantido + chance de ouro.<br>• Resíduo bloqueado acumula e para a linha.<br>• Resíduo queimado precisa cair de uma altura grande para a prensa.</p>
-   <div class="small-row"><button id="clearFeed">Limpar avisos</button><button id="help">Como jogar</button></div>
-  </div>
- </aside>
-</main>
-<footer class="bottom"><span>Arraste no mundo para usar a ferramenta · <kbd>1–9</kbd> selecionam ferramentas · <kbd>Espaço</kbd> pausa</span><span>Protótipo novo · salvamento local não habilitado</span></footer>
-</div>
+:root{color-scheme:dark;--bg:#101820;--panel:#1a252e;--line:#354650;--muted:#aab8c1;--gold:#f4c65c;--green:#80d8ae}*{box-sizing:border-box}html,body{margin:0;height:100%;overflow:hidden;background:var(--bg);color:#eef3f5;font:14px system-ui,Segoe UI,sans-serif}button{font:inherit;color:inherit;background:#26343e;border:1px solid var(--line);border-radius:8px;padding:8px 10px;touch-action:manipulation}button:active{transform:translateY(1px)}button.active{border-color:var(--gold);background:#423a29}.app{height:100dvh;display:grid;grid-template-rows:auto 1fr auto;gap:7px;padding:8px}.top{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}.brand{display:flex;gap:9px;align-items:center}.logo{width:35px;height:35px;border-radius:9px;background:linear-gradient(145deg,#f5ce70,#bd7a3e);color:#20242a;display:grid;place-items:center;font-weight:900;font-size:21px}.brand h1{font-size:16px;margin:0}.brand p{font-size:11px;color:var(--muted);margin:2px 0 0}.stats{display:flex;gap:5px}.stat{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:5px 8px;min-width:57px}.stat small{display:block;font-size:9px;color:var(--muted);text-transform:uppercase}.stat strong{font-size:14px}.main{min-height:0;display:grid;grid-template-columns:168px minmax(0,1fr) 208px;gap:7px}.panel{min-height:0;overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:10px}.ph{padding:10px;border-bottom:1px solid var(--line);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#d5e0e6;font-weight:700;position:sticky;top:0;background:var(--panel);z-index:2}.pb{padding:8px;display:grid;gap:6px}.tool{display:flex;gap:8px;align-items:center;text-align:left;width:100%;padding:7px}.ti{width:28px;height:28px;display:grid;place-items:center;background:#111a21;border-radius:7px;font-size:17px}.tool b{font-size:11px;display:block}.tool small{display:block;font-size:9px;color:var(--muted)}.middle{min-width:0;min-height:0;display:grid;grid-template-rows:minmax(0,1fr) auto;gap:6px}.viewport{position:relative;min-height:0;background:#0b131a;border:1px solid #344550;border-radius:10px;overflow:hidden}.viewport canvas{display:block;width:100%;height:100%;image-rendering:pixelated;touch-action:none}.overlay{position:absolute;left:8px;top:8px;display:flex;gap:5px;flex-wrap:wrap;pointer-events:none}.pill{background:#101820d9;border:1px solid #455560;border-radius:6px;padding:4px 7px;font-size:10px}.pill b{color:var(--gold)}.world-buttons{position:absolute;right:7px;top:7px;display:flex;gap:5px}.world-buttons button{font-size:10px;padding:6px 8px;background:#111b23e8}.hint{border:1px solid var(--line);border-radius:8px;padding:8px 10px;background:#18232c;color:#c6d1d8;font-size:11px}.hint b{color:var(--gold)}.card{padding:9px;border:1px solid var(--line);border-radius:8px;background:#202c35}.card h3{font-size:12px;margin:0 0 4px}.card p{font-size:10px;color:var(--muted);margin:0 0 7px}.card button{width:100%;font-size:10px;padding:7px}.card .cost{color:var(--gold)}.log{font-size:10px;color:#c3cfd6;display:grid;gap:5px}.log div{border-left:2px solid #526b78;padding:3px 0 3px 7px}.log .good{border-color:var(--green)}.footer{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;color:var(--muted);font-size:10px}.mobile{display:none}.hide{display:none!important}
+@media(max-width:950px){.main{grid-template-columns:145px minmax(0,1fr)}.right{display:none}.app{padding:5px}.stat{min-width:48px}.brand h1{font-size:14px}}
+@media(max-width:620px){.top{gap:5px}.brand p{display:none}.logo{width:30px;height:30px}.stats{gap:3px}.stat{padding:4px 5px;min-width:42px}.stat small{font-size:8px}.stat strong{font-size:12px}.main{display:block;position:relative}.middle{height:100%;grid-template-rows:minmax(0,1fr) auto}.left{position:absolute;z-index:4;left:5px;top:5px;width:125px;max-height:47%;background:#17232cf5;box-shadow:0 8px 24px #0008}.left .ph{padding:7px}.left .pb{padding:5px;gap:4px}.tool{padding:4px;gap:5px}.ti{width:23px;height:23px;font-size:13px}.tool b{font-size:10px}.tool small{font-size:8px}.mobile{display:flex;gap:5px}.mobile button{flex:1;font-size:10px;padding:7px 3px}.hint{font-size:10px;padding:6px 8px}.footer{font-size:9px}.viewport{border-radius:7px}}
+</style></head><body><div class="app">
+<header class="top"><div class="brand"><div class="logo">F</div><div><h1>FÁBRICA DE AREIA</h1><p>Exploração 2D · mundo destrutível · automação</p></div></div><div class="stats"><div class="stat"><small>Ouro</small><strong id="gold">0</strong></div><div class="stat"><small>Areia</small><strong id="sand">0</strong></div><div class="stat"><small>Resíduo</small><strong id="residue">0</strong></div><div class="stat"><small>Profundidade</small><strong id="depth">0 m</strong></div></div></header>
+<main class="main">
+<aside class="panel left"><div class="ph">Ferramentas</div><div class="pb" id="tools">
+<button class="tool active" data-tool="shovel"><span class="ti">⛏️</span><span><b>Pá</b><small>Areia e terra · 1</small></span></button>
+<button class="tool" data-tool="pickaxe"><span class="ti">🔨</span><span><b>Picareta</b><small>Rocha e minério · 2</small></span></button>
+<button class="tool" data-tool="vacuum"><span class="ti">🌀</span><span><b>Vácuo</b><small>Recolher materiais · 3</small></span></button>
+<button class="tool" data-tool="bucket"><span class="ti">🪣</span><span><b>Balde</b><small>Água e areia molhada · 4</small></span></button>
+<button class="tool" data-tool="flame"><span class="ti">🔥</span><span><b>Lança-chamas</b><small>Queimar resíduo · 5</small></span></button>
+<button class="tool" data-tool="buildShaker"><span class="ti">▦</span><span><b>Shaker</b><small>Construir · 6</small></span></button>
+<button class="tool" data-tool="buildBelt"><span class="ti">⇢</span><span><b>Esteira</b><small>Construir · 7</small></span></button>
+<button class="tool" data-tool="buildCollector"><span class="ti">▣</span><span><b>Coletor</b><small>Construir · 8</small></span></button>
+<button class="tool" data-tool="erase"><span class="ti">🧹</span><span><b>Remover</b><small>Materiais e máquinas · 9</small></span></button>
+</div></aside>
+<section class="middle"><div class="viewport" id="viewport"><canvas id="game"></canvas><div class="overlay"><span class="pill">FERRAMENTA <b id="toolName">Pá</b></span><span class="pill" id="status">Explorando</span><span class="pill" id="xy">X 0 · Y 0</span></div><div class="world-buttons"><button id="pause">Ⅱ Pausar</button><button id="reset">↻ Novo mundo</button></div></div><div class="hint" id="hint"><b>Objetivo:</b> mova-se pelo mundo, escave para encontrar água e ouro. Use a água para molhar areia e processe-a no Shaker. <div class="mobile"><button id="left">◀</button><button id="jump">▲ Pular</button><button id="right">▶</button><button id="mine">⛏ Ação</button><button id="toggleTools">☷ Ferramentas</button></div></div></section>
+<aside class="panel right"><div class="ph">Pesquisa e fábrica</div><div class="pb">
+<div class="card"><h3>▦ Shaker · 20 ouro</h3><p>Areia molhada → resíduo + 25% de chance de ouro.</p><button data-buy="shaker">Desbloquear Shaker</button></div>
+<div class="card"><h3>⇢ Logística · 30 ouro</h3><p>Desbloqueia esteiras de transporte.</p><button data-buy="belt">Desbloquear logística</button></div>
+<div class="card"><h3>🔥 Refinamento · 50 ouro</h3><p>Desbloqueia processamento de resíduo.</p><button data-buy="refine">Desbloquear refinamento</button></div>
+<div class="ph" style="position:static;padding:5px 0;border:0">Registro</div><div class="log" id="logs"></div>
+<div class="card"><h3>Controles</h3><p>A/D ou ←/→ mover<br>W, ↑ ou Espaço pular<br>Mouse/toque: usar ferramenta<br>1–9: selecionar ferramenta</p></div></div></aside>
+</main><footer class="footer"><span>Personagem + câmera lateral · terreno escavável por pixels</span><span>Prototipo inspirado em Sandustry; ainda em desenvolvimento</span></footer></div>
 <script>
 'use strict';
-(function(){
-const canvas=document.getElementById('world'),ctx=canvas.getContext('2d',{alpha:false});
-const W=190,H=105,EMPTY=0,SAND=1,WATER=2,WET=3,ROCK=4,RESIDUE=5,GOLD=6,BURNT=7,SEED=8;
-const names={dig:'Escavar',sand:'Areia',water:'Água',grab:'Coletar',shaker:'Shaker',belt:'Esteira',burner:'Queimador',press:'Prensa',erase:'Remover'};
-const colors=['#0b1218','#d9b56b','#4b9ed0','#987c50','#65717b','#b7b8a7','#f5c74e','#4b5054','#a7c96d'];
-let cells=new Uint8Array(W*H),machines=new Uint8Array(W*H),beltDir=new Int8Array(W*H),heat=new Uint8Array(W*H);
-let tool='dig',paused=false,frame=0,gold=0,produced=0,wetCount=0,residueCount=0,hasShaker=false,hasBelt=false,hasRefine=false,dragging=false,lastCell=-1,worldSeed=1,logs=[];
-let view={scale:1,ox:0,oy:0},pointer={x:0,y:0,cx:0,cy:0,inside:false};
-const idx=(x,y)=>y*W+x,inside=(x,y)=>x>=0&&x<W&&y>=0&&y<H;
-function cell(x,y){return inside(x,y)?cells[idx(x,y)]:ROCK}
-function set(x,y,v){if(inside(x,y))cells[idx(x,y)]=v}
-function machineAt(x,y){return inside(x,y)?machines[idx(x,y)]:0}
-function note(msg,kind=''){logs.unshift({msg,kind});logs=logs.slice(0,5);renderFeed()}
-function renderFeed(){const el=document.getElementById('feed');el.innerHTML=logs.map(l=>'<div class="'+l.kind+'">'+l.msg+'</div>').join('')||'<div>Sem avisos.</div>'}
-function rngFactory(seed){let s=seed>>>0;return()=>{s=(s*1664525+1013904223)>>>0;return s/4294967296}}
-function generate(){
- cells.fill(EMPTY);machines.fill(0);beltDir.fill(0);heat.fill(0);const r=rngFactory(++worldSeed);
- for(let x=0;x<W;x++){let surface=43+Math.floor(Math.sin(x*.075)*3+Math.sin(x*.021)*5+(r()-.5)*3);for(let y=surface;y<H;y++){let d=y-surface;if(d<7)set(x,y,SAND);else set(x,y,r()<.12?GOLD:(r()<.08?ROCK:SAND));}}
- // caverns, ore veins, surface lake
- for(let n=0;n<14;n++){let cx=8+Math.floor(r()*(W-16)),cy=56+Math.floor(r()*38),rx=3+Math.floor(r()*7),ry=2+Math.floor(r()*4);for(let y=cy-ry;y<=cy+ry;y++)for(let x=cx-rx;x<=cx+rx;x++)if(inside(x,y)&&((x-cx)**2/rx**2+(y-cy)**2/ry**2<1)&&r()>.12)set(x,y,EMPTY)}
- for(let x=24;x<44;x++)for(let y=36;y<43;y++)if(inside(x,y)&&cell(x,y)===EMPTY)set(x,y,WATER);
- for(let n=0;n<55;n++){let x=5+Math.floor(r()*(W-10)),y=54+Math.floor(r()*(H-58));if(cell(x,y)===SAND)set(x,y,GOLD)}
- for(let x=0;x<W;x++){set(x,H-1,ROCK);set(x,H-2,ROCK)}
- gold=0;produced=0;paused=false;frame=0;logs=[];note('Novo mundo gerado. Escave até encontrar recursos e água.','good');updateUI();
+(()=>{
+const canvas=document.getElementById('game'),ctx=canvas.getContext('2d',{alpha:false}),view=document.getElementById('viewport');
+const CW=280,CH=150,T=4; // world grid pixels are intentionally chunky for mobile performance
+const E=0,SAND=1,SOIL=2,ROCK=3,WATER=4,WET=5,GOLD=6,RES=7,BURNT=8,ICE=9,LAVA=10,WOOD=11,STEAM=12;
+const names={shovel:'Pá',pickaxe:'Picareta',vacuum:'Vácuo',bucket:'Balde',flame:'Lança-chamas',buildShaker:'Shaker',buildBelt:'Esteira',buildCollector:'Coletor',erase:'Remover'};
+const palette=['#101820','#d7b36d','#986b47','#626f7a','#438fca','#a18a62','#f6c950','#c1c3b5','#4a4e53','#9bd5e8','#fa683b','#72543b','#c8e8ef'];
+let map=new Uint8Array(CW*CH),machines=new Uint8Array(CW*CH),tool='shovel',paused=false,frame=0,gold=0,sandBag=0,residue=0,waterBag=0,unlocked={shaker:false,belt:false,refine:false},logLines=[],worldId=1;
+const player={x:22,y:32,vx:0,vy:0,w:3,h:6,ground:false,facing:1,health:100};
+let camX=0,camY=0,scale=1,offsetX=0,offsetY=0,screenW=1,screenH=1,drag=false,lastAction=0,keys={},touchMove=0;
+const id=(x,y)=>y*CW+x,ok=(x,y)=>x>=0&&x<CW&&y>=0&&y<CH,at=(x,y)=>ok(x,y)?map[id(x,y)]:ROCK,set=(x,y,v)=>{if(ok(x,y))map[id(x,y)]=v;};
+function log(s,kind=''){logLines.unshift({s,kind});logLines=logLines.slice(5);document.getElementById('logs').innerHTML=logLines.map(x=>'<div class="'+x.kind+'">'+x.s+'</div>').join('')}
+function generate(){map.fill(E);machines.fill(0);const rand=(()=>{let s=(worldId++*928371)>>>0;return()=>((s=(s*1664525+1013904223)>>>0)/4294967296)})();let surface=40;
+ for(let x=0;x<CW;x++){surface+=Math.round((rand()-.5)*1.5);surface=Math.max(34,Math.min(48,surface));for(let y=surface;y<CH;y++){const d=y-surface;let v=d<7?SAND:(d<22?(rand()<.72?SOIL:ROCK):(rand()<.15?GOLD:rand()<.1?ROCK:SOIL));set(x,y,v)}}
+ // destructible caves and ore veins
+ for(let n=0;n<34;n++){const cx=8+Math.floor(rand()*(CW-16)),cy=53+Math.floor(rand()*80),rx=3+Math.floor(rand()*9),ry=2+Math.floor(rand()*5);for(let y=cy-ry;y<=cy+ry;y++)for(let x=cx-rx;x<=cx+rx;x++)if(ok(x,y)&&((x-cx)**2/rx**2+(y-cy)**2/ry**2<1)&&rand()>.08)set(x,y,E)}
+ for(let n=0;n<24;n++){let x=5+Math.floor(rand()*(CW-10)),y=58+Math.floor(rand()*(CH-62));for(let k=0;k<5;k++)if(at(x+k,y)===SOIL)set(x+k,y,GOLD)}
+ // surface lake, ice pocket and deep lava pocket
+ for(let x=61;x<78;x++)for(let y=37;y<42;y++)if(at(x,y)===E)set(x,y,WATER);
+ for(let x=135;x<148;x++)for(let y=64;y<69;y++)if(at(x,y)===E)set(x,y,ICE);
+ for(let x=202;x<217;x++)for(let y=130;y<134;y++)if(at(x,y)===E)set(x,y,LAVA);
+ for(let x=0;x<CW;x++){set(x,CH-1,ROCK);set(x,CH-2,ROCK)}
+ player.x=22;player.y=31;player.vx=0;player.vy=0;player.health=100;camX=0;camY=0;gold=0;sandBag=0;waterBag=0;residue=0;unlocked={shaker:false,belt:false,refine:false};paused=false;logLines=[];log('Mundo gerado. Explore a superfície e escave para baixo.','good');updateUI()}
+function resize(){const r=view.getBoundingClientRect(),dpr=Math.min(window.devicePixelRatio||1,1.5);canvas.width=Math.max(1,Math.floor(r.width*dpr));canvas.height=Math.max(1,Math.floor(r.height*dpr));ctx.setTransform(dpr,0,0,dpr,0,0);screenW=r.width;screenH=r.height;scale=Math.min(screenH/70,screenW/110);scale=Math.max(2.5,Math.min(scale,7));offsetX=(screenW/scale-Math.floor(screenW/scale))/2;offsetY=0;draw()}
+function solid(v){return [SAND,SOIL,ROCK,WET,GOLD,RES,BURNT,ICE,WOOD].includes(v)}
+function collide(x,y){if(x<0||x>=CW||y>=CH)return true;if(y<0)return false;return solid(at(x,y))||machines[id(x,y)]!==0}
+function clearRect(x,y,w,h){for(let yy=Math.floor(y);yy<Math.ceil(y+h);yy++)for(let xx=Math.floor(x);xx<Math.ceil(x+w);xx++)if(collide(xx,yy))return false;return true}
+function movePlayer(){player.vx=(keys.ArrowLeft||keys.a?-1:0)+(keys.ArrowRight||keys.d?1:0)+touchMove;if(player.vx)player.facing=Math.sign(player.vx);player.vx=Math.max(-2.2,Math.min(2.2,player.vx));player.vy=Math.min(3.2,player.vy+.13);
+ let nx=player.x+player.vx;if(clearRect(nx,player.y,player.w,player.h))player.x=nx;else player.vx=0;
+ let ny=player.y+player.vy;player.ground=false;if(clearRect(player.x,ny,player.w,player.h))player.y=ny;else{if(player.vy>0){player.ground=true;player.y=Math.floor(ny);while(!clearRect(player.x,player.y,player.w,player.h)&&player.y>0)player.y--;}player.vy=0}
+ player.x=Math.max(1,Math.min(CW-player.w-1,player.x));if(player.y>CH-10){player.y=CH-10;player.vy=0;player.ground=true}
+ camX=Math.max(0,Math.min(CW-screenW/scale,player.x+player.w/2-screenW/scale*.5));camY=Math.max(0,Math.min(CH-screenH/scale,player.y+player.h/2-screenH/scale*.53));
 }
-function resize(){const rect=canvas.getBoundingClientRect(),dpr=Math.min(window.devicePixelRatio||1,1.5);canvas.width=Math.max(1,Math.floor(rect.width*dpr));canvas.height=Math.max(1,Math.floor(rect.height*dpr));ctx.setTransform(dpr,0,0,dpr,0,0);const cw=rect.width,ch=rect.height;view.scale=Math.min(cw/W,ch/H);view.ox=(cw-W*view.scale)/2;view.oy=(ch-H*view.scale)/2;draw()}
-function isSolid(v){return v===SAND||v===WET||v===ROCK||v===RESIDUE||v===GOLD||v===BURNT||v===SEED}
-function machineBlocks(x,y,v){const m=machineAt(x,y);if(!m)return false;if(m===1)return v!==GOLD&&v!==WATER&&v!==WET; if(m===2)return v!==WATER; if(m===3)return v!==WATER;return true}
-function swap(a,b){const t=cells[a];cells[a]=cells[b];cells[b]=t}
-function tryMove(x,y,nx,ny,v){if(!inside(nx,ny))return false;const a=idx(x,y),b=idx(nx,ny);if(cells[b]!==EMPTY||machines[b]&&!((machines[b]===1&&v===GOLD)))return false;swap(a,b);return true}
-function touchWater(x,y){
- const v=cell(x,y);if(v!==SAND)return false;
- const around=[[0,-1],[1,0],[0,1],[-1,0]];
- for(const [dx,dy] of around){const nx=x+dx,ny=y+dy;if(cell(nx,ny)===WATER){set(x,y,WET);set(nx,ny,WET);return true}}
- return false;
-}
-function materialStep(){
- // alternating scan direction prevents a directional bias in granular flow
- const rev=(frame%2)===1;
- for(let yy=H-2;yy>=0;yy--){
-  const y=rev?yy:H-2-yy;
-  for(let xx=0;xx<W;xx++){
-   const x=rev?W-1-xx:xx,i=idx(x,y),v=cells[i];if(v===EMPTY||machines[i])continue;
-   if(v===SAND){if(touchWater(x,y))continue}
-   if(v===WATER){
-    if(touchWater(x,y))continue;
-    if(tryMove(x,y,x,y+1,v))continue;
-    const dir=Math.random()<.5?-1:1;
-    if(tryMove(x,y,x+dir,y+1,v)||tryMove(x,y,x-dir,y+1,v))continue;
-    if(frame%3===0&&(tryMove(x,y,x+dir,y,v)||tryMove(x,y,x-dir,y,v)))continue;
-   } else if(v===SAND||v===WET||v===RESIDUE||v===GOLD||v===BURNT||v===SEED){
-    if(tryMove(x,y,x,y+1,v))continue;
-    let d=Math.random()<.5?-1:1;
-    if(tryMove(x,y,x+d,y+1,v)||tryMove(x,y,x-d,y+1,v))continue;
-   }
-  }
+function materialStep(){for(let y=CH-3;y>=0;y--)for(let n=0;n<CW;n++){let x=(frame%2)?CW-1-n:n,i=id(x,y),v=map[i];if(v===E||v===ROCK||v===WOOD||v===ICE||v===LAVA||v===STEAM)continue;if(v===SAND||v===SOIL){let water=false;for(const [dx,dy] of [[0,-1],[1,0],[0,1],[-1,0]])if(at(x+dx,y+dy)===WATER){water=true;set(x,y,WET);set(x+dx,y+dy,WET);break}if(water)continue}
+ if(v===WATER||v===STEAM){let dirs=v===STEAM?[[0,-1],[-1,0],[1,0]]:[[0,1],[-1,0],[1,0]];for(const [dx,dy] of dirs){if(at(x+dx,y+dy)===E&&!machines[id(x+dx,y+dy)]){set(x+dx,y+dy,v);set(x,y,E);break}}}
+ else if([SAND,SOIL,WET,GOLD,RES,BURNT].includes(v)){if(at(x,y+1)===E&&!machines[id(x,y+1)]){set(x,y+1,v);set(x,y,E)}else{const d=Math.random()<.5?-1:1;if(at(x+d,y+1)===E&&!machines[id(x+d,y+1)]){set(x+d,y+1,v);set(x,y,E)}else if(at(x-d,y+1)===E&&!machines[id(x-d,y+1)]){set(x-d,y+1,v);set(x,y,E)}}}
  }
+ for(let i=0;i<map.length;i++)if(map[i]===STEAM&&frame%60===0)map[i]=WATER;
 }
-function machineStep(){
- for(let y=1;y<H-1;y++)for(let x=1;x<W-1;x++){const i=idx(x,y),m=machines[i];if(!m)continue;
-  if(m===1){ // Shaker: only Wet Sand on top is processed; gold exits through the body.
-   const top=idx(x,y-1);if(cells[top]===WET&&frame%9===0){
-    const below=idx(x,y+1),makesGold=Math.random()<.25;
-    if(makesGold&&(cells[below]!==EMPTY||machines[below]))continue;
-    cells[top]=RESIDUE;produced++;
-    if(makesGold){cells[below]=GOLD;note('O Shaker extraiu ouro!','good')}
-    if(frame%45===0)note('Shaker processando areia molhada. Deixe uma saída lateral para o resíduo.');
-   }
-   // Built-in slow residue movement, in the facing direction (right).
-   if(frame%18===0){const top=idx(x,y-1);if(cells[top]===RESIDUE&&cells[top+1]===EMPTY&&!machines[top+1]){cells[top+1]=RESIDUE;cells[top]=EMPTY}}
-  } else if(m===2){ // belt transports solids horizontally
-   if(frame%2===0){const above=idx(x,y-1),dir=beltDir[i]||1,nx=x+dir;if(cells[above]&&isSolid(cells[above])&&inside(nx,y-1)&&cells[idx(nx,y-1)]===EMPTY&&!machines[idx(nx,y-1)]){cells[idx(nx,y-1)]=cells[above];cells[above]=EMPTY}}
-  } else if(m===3){ // burner: 25% residue survives as burnt residue
-   const above=idx(x,y-1);if(cells[above]===RESIDUE&&frame%15===0){cells[above]=Math.random()<.25?BURNT:EMPTY;note(cells[above]===BURNT?'Resíduo queimado: leve-o até a prensa.':'Parte do resíduo se perdeu no processo térmico.',cells[above]===BURNT?'good':'warn')}
-  } else if(m===4){ // simple press prototype; requires a meaningful fall
-   const above=idx(x,y-1);if(cells[above]===BURNT&&frame%12===0){const dropY=y-1;let distance=0;for(let k=dropY-1;k>=0&&cells[idx(x,k)]===EMPTY&&!machines[idx(x,k)];k--)distance++;if(distance>=25){cells[above]=EMPTY;const out=idx(x,y+1);if(cells[out]===EMPTY&&!machines[out]){cells[out]=GOLD;produced++;if(inside(x+1,y+1)&&cells[idx(x+1,y+1)]===EMPTY)cells[idx(x+1,y+1)]=SEED;note('Prensa: ouro e semente produzidos!','good')}}}
-  }
- }
-}
-function countMaterials(){let w=0,r=0;for(let i=0;i<cells.length;i++){if(cells[i]===WET)w++;if(cells[i]===RESIDUE||cells[i]===BURNT)r++}wetCount=w;residueCount=r}
-function updateUI(){document.getElementById('gold').textContent=gold;document.getElementById('wet').textContent=wetCount;document.getElementById('residue').textContent=residueCount;document.getElementById('made').textContent=produced;document.querySelectorAll('[data-buy]').forEach(b=>{const k=b.dataset.buy,cost=k==='shaker'?20:k==='belt'?30:50,unlocked=k==='shaker'?hasShaker:k==='belt'?hasBelt:hasRefine;b.disabled=unlocked||gold<cost;b.innerHTML=unlocked?'Desbloqueado ✓':'Desbloquear · <span class="cost">'+cost+' ouro</span>'});document.querySelectorAll('[data-tool]').forEach(b=>{const k=b.dataset.tool;b.disabled=(k==='shaker'&&!hasShaker)||(k==='belt'&&!hasBelt)||((k==='burner'||k==='press')&&!hasRefine)});}
-function draw(){
- const rect=canvas.getBoundingClientRect(),cw=rect.width,ch=rect.height;ctx.fillStyle='#0b1218';ctx.fillRect(0,0,cw,ch);ctx.save();ctx.translate(view.ox,view.oy);ctx.scale(view.scale,view.scale);
- // atmospheric backdrop
- const grad=ctx.createLinearGradient(0,0,0,H);grad.addColorStop(0,'#101d29');grad.addColorStop(.48,'#19232b');grad.addColorStop(1,'#15191d');ctx.fillStyle=grad;ctx.fillRect(0,0,W,H);
- // subtle background grid
- ctx.strokeStyle='rgba(150,180,195,.045)';ctx.lineWidth=.5;for(let x=0;x<W;x+=10){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke()}for(let y=0;y<H;y+=10){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke()}
- for(let y=0;y<H;y++)for(let x=0;x<W;x++){const i=idx(x,y),v=cells[i],m=machines[i];if(v!==EMPTY){ctx.fillStyle=colors[v];ctx.fillRect(x,y,1,1);if(v===GOLD){ctx.fillStyle='#fff0a5';ctx.fillRect(x,y,.5,.5)}else if(v===WATER){ctx.fillStyle='rgba(170,225,255,.3)';if((x+y+frame)%4===0)ctx.fillRect(x,y,1,.25)}}if(m){ctx.fillStyle=m===1?'#647b87':m===2?'#4d987f':m===3?'#b66b40':'#b7a46e';ctx.fillRect(x,y,1,1);ctx.fillStyle='#172129';ctx.fillRect(x+.12,y+.18,.76,.64);ctx.fillStyle=m===1?'#b9c9d0':m===2?'#7ce0b8':m===3?'#ffad65':'#f3d17b';if(m===1){ctx.fillRect(x+.2,y+.28,.6,.12);ctx.fillRect(x+.2,y+.58,.6,.12)}else if(m===2){ctx.fillRect(x+.16,y+.45,.68,.14);ctx.fillRect(x+.48,y+.25,.18,.5)}else if(m===3){ctx.fillRect(x+.35,y+.22,.3,.56);ctx.fillStyle='#ffdc73';ctx.fillRect(x+.43,y+.3,.14,.22)}else{ctx.fillRect(x+.2,y+.22,.6,.12);ctx.fillRect(x+.32,y+.42,.36,.12);ctx.fillRect(x+.2,y+.62,.6,.12)}}}
- // machine outlines and flow indicators
- for(let y=0;y<H;y++)for(let x=0;x<W;x++){const m=machines[idx(x,y)];if(!m)continue;ctx.strokeStyle='rgba(255,255,255,.4)';ctx.lineWidth=.08;ctx.strokeRect(x+.04,y+.04,.92,.92);if(m===2){ctx.fillStyle='#d1ffe8';ctx.font='.7px sans-serif';ctx.fillText((beltDir[idx(x,y)]||1)>0?'›':'‹',x+.28,y+.72)}}
- if(pointer.inside){ctx.strokeStyle='rgba(255,230,165,.95)';ctx.lineWidth=.13;ctx.strokeRect(pointer.cx-.25,pointer.cy-.25,1.5,1.5)}
- ctx.restore();
-}
-function setTool(t){if((t==='shaker'&&!hasShaker)||(t==='belt'&&!hasBelt)||((t==='burner'||t==='press')&&!hasRefine)){note('Essa ferramenta ainda está bloqueada. Abra Pesquisa.','warn');return}tool=t;document.querySelectorAll('[data-tool]').forEach(b=>b.classList.toggle('active',b.dataset.tool===t));document.getElementById('activeName').textContent=names[t];const hints={dig:'Escave areia e rocha. Procure bolsas de água e ouro no subsolo.',sand:'Clique e arraste para adicionar areia. Água em contato transforma areia em areia molhada.',water:'Adicione água com cuidado: quando tocar areia, os dois pixels viram areia molhada.',grab:'Clique sobre o ouro para recolhê-lo ao inventário; ele é a moeda da pesquisa.',shaker:'Alimente o topo com areia molhada. Cada pixel gera resíduo e tem 25% de chance de gerar ouro que cai por baixo.',belt:'Esteira move sólidos horizontalmente. Clique para colocar; a direção padrão é para a direita.',burner:'O queimador consome resíduo; cerca de 25% vira resíduo queimado. Dê espaço para a saída.',press:'A prensa exige resíduo queimado caindo de pelo menos 25 células de altura para gerar ouro e semente.',erase:'Clique em uma máquina para removê-la, ou em um pixel para apagá-lo.'};document.getElementById('hintText').innerHTML='<strong>'+names[t]+':</strong> '+hints[t];}
-function worldPoint(e){const r=canvas.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top;pointer.x=x;pointer.y=y;pointer.inside=x>=view.ox&&y>=view.oy&&x<view.ox+W*view.scale&&y<view.oy+H*view.scale;pointer.cx=Math.floor((x-view.ox)/view.scale);pointer.cy=Math.floor((y-view.oy)/view.scale);document.getElementById('coords').textContent='x '+pointer.cx+' · y '+pointer.cy;return {x:pointer.cx,y:pointer.cy}}
-function act(x,y){if(!inside(x,y))return;const i=idx(x,y);if(i===lastCell)return;lastCell=i;
- if(tool==='dig'){if(machines[i]){machines[i]=0;beltDir[i]=0;note('Construção removida.')}else if(cells[i]===GOLD){gold++;cells[i]=EMPTY;note('Ouro recolhido.','good')}else if(cells[i]!==EMPTY){cells[i]=EMPTY}}
- else if(tool==='sand'){if(cells[i]===EMPTY&&!machines[i])cells[i]=SAND}
- else if(tool==='water'){if(cells[i]===EMPTY&&!machines[i])cells[i]=WATER;else if(cells[i]===SAND){cells[i]=WET;for(const [dx,dy] of [[0,-1],[1,0],[0,1],[-1,0]])if(cell(x+dx,y+dy)===EMPTY){set(x+dx,y+dy,WET);break}}}
- else if(tool==='grab'){if(cells[i]===GOLD){gold++;cells[i]=EMPTY;note('Ouro coletado: +1.','good')}else if(cells[i]===RESIDUE||cells[i]===BURNT||cells[i]===SEED){cells[i]=EMPTY;note('Material removido para desobstruir a linha.')}} 
- else if(tool==='erase'){if(machines[i]){machines[i]=0;beltDir[i]=0}else cells[i]=EMPTY}
- else {const needed=tool==='shaker'&&!hasShaker||tool==='belt'&&!hasBelt||(['burner','press'].includes(tool)&&!hasRefine);if(needed){note('Desbloqueie esta construção na Pesquisa.','warn');return}if(cells[i]!==EMPTY||machines[i]){note('A célula precisa estar vazia para construir.','warn');return}machines[i]=tool==='shaker'?1:tool==='belt'?2:tool==='burner'?3:4;beltDir[i]=1;note(names[tool]+' construído.','good')}
- countMaterials();updateUI();draw();
-}
-function loop(){requestAnimationFrame(loop);if(!paused){frame++;if(frame%2===0)materialStep();if(frame%3===0)machineStep();if(frame%12===0){countMaterials();updateUI()} }draw()}
-canvas.addEventListener('pointerdown',e=>{canvas.setPointerCapture(e.pointerId);dragging=true;lastCell=-1;const p=worldPoint(e);act(p.x,p.y)});
-canvas.addEventListener('pointermove',e=>{worldPoint(e);if(dragging){const p={x:pointer.cx,y:pointer.cy};act(p.x,p.y)}else draw()});
-canvas.addEventListener('pointerup',()=>{dragging=false;lastCell=-1});canvas.addEventListener('pointercancel',()=>{dragging=false;lastCell=-1});
+function machineStep(){for(let y=1;y<CH-1;y++)for(let x=1;x<CW-1;x++){const i=id(x,y),m=machines[i];if(!m)continue;if(m===1&&frame%8===0&&at(x,y-1)===WET){set(x,y-1,RES);residue++;if(Math.random()<.25){set(x,y+1,GOLD);gold++;log('Shaker extraiu ouro.','good')}if(at(x+1,y-1)===E){set(x+1,y-1,RES);set(x,y-1,E)}}if(m===2&&frame%3===0&&solid(at(x-1,y))&&at(x,y)===E){set(x,y,at(x-1,y));set(x-1,y,E)}if(m===3&&at(x,y-1)===GOLD){gold++;set(x,y-1,E)}}}
+function useTool(wx,wy){if(!ok(wx,wy))return;const dx=wx-(player.x+player.w/2),dy=wy-(player.y+player.h/2);if(Math.abs(dx)>8||Math.abs(dy)>7){log('Chegue mais perto para usar a ferramenta.');return}const i=id(wx,wy),v=map[i];if(tool==='shovel'){if(v===SAND||v===SOIL||v===WET||v===RES||v===BURNT){map[i]=E;if(v===SAND||v===SOIL)sandBag++;if(v===RES||v===BURNT)residue++;}}
+ else if(tool==='pickaxe'){if(v===ROCK||v===GOLD||v===ICE||v===WOOD){map[i]=E;if(v===GOLD){gold++;log('Minério de ouro recolhido.','good')}}}
+ else if(tool==='vacuum'){if(v!==E&&v!==ROCK&&v!==LAVA){map[i]=E;if(v===GOLD)gold++;else if(v===WATER)waterBag++;else if(v===SAND||v===SOIL||v===WET)sandBag++;else if(v===RES||v===BURNT)residue++;}}
+ else if(tool==='bucket'){if(v===WATER||v===WET){map[i]=E;waterBag++}else if(v===E&&waterBag>0){map[i]=WATER;waterBag--}else if(v===SAND&&waterBag>0){map[i]=WET;waterBag--}}
+ else if(tool==='flame'){if(v===RES){map[i]=Math.random()<.25?BURNT:E;log(map[i]===BURNT?'Resíduo queimado!':'O resíduo se desfez.','good')}else if(v===ICE)map[i]=WATER;else if(v===WATER)map[i]=STEAM}
+ else if(tool==='erase'){if(machines[i])machines[i]=0;else map[i]=E}
+ else if(tool.startsWith('build')){if(v!==E||machines[i]){log('A posição precisa estar vazia.');return}if(tool==='buildShaker'&&!unlocked.shaker){log('Pesquise o Shaker primeiro.');return}if(tool==='buildBelt'&&!unlocked.belt){log('Pesquise Logística primeiro.');return}machines[i]=tool==='buildShaker'?1:tool==='buildBelt'?2:3;log(names[tool]+' colocado.','good')}
+ updateUI();draw()}
+function coords(e){const r=canvas.getBoundingClientRect();return{x:Math.floor(camX+(e.clientX-r.left)/scale),y:Math.floor(camY+(e.clientY-r.top)/scale)}}
+function draw(){ctx.fillStyle='#0b131a';ctx.fillRect(0,0,screenW,screenH);ctx.save();ctx.scale(scale,scale);ctx.translate(-camX,-camY);
+ const sky=ctx.createLinearGradient(0,0,0,CH);sky.addColorStop(0,'#132a3b');sky.addColorStop(.36,'#29333a');sky.addColorStop(1,'#171b20');ctx.fillStyle=sky;ctx.fillRect(camX,camY,screenW/scale,screenH/scale);
+ let sx=Math.max(0,Math.floor(camX)-1),ex=Math.min(CW,Math.ceil(camX+screenW/scale)+1),sy=Math.max(0,Math.floor(camY)-1),ey=Math.min(CH,Math.ceil(camY+screenH/scale)+1);
+ for(let y=sy;y<ey;y++)for(let x=sx;x<ex;x++){let v=at(x,y);if(v!==E){ctx.fillStyle=palette[v];ctx.fillRect(x,y,1,1);if(v===GOLD){ctx.fillStyle='#fff0a4';ctx.fillRect(x+.15,y+.15,.35,.35)}if(v===WATER){ctx.fillStyle='#80c9f5';ctx.fillRect(x,y,.9,.15)}if(v===LAVA){ctx.fillStyle='#ffc16a';if((x+y+frame)%3===0)ctx.fillRect(x+.1,y+.1,.4,.4)}}let m=machines[id(x,y)];if(m){ctx.fillStyle=m===1?'#b8c9d0':m===2?'#73d7b1':'#e8c46e';ctx.fillRect(x+.05,y+.1,.9,.8);ctx.fillStyle='#26333a';ctx.fillRect(x+.2,y+.25,.6,.5);ctx.fillStyle='#f4c65c';ctx.fillRect(x+.3,y+.4,.4,.12)}}
+ // little decorative surface plants
+ for(let x=sx;x<ex;x+=7){let y=0;while(y<CH&&at(x,y)===E)y++;if(y>0&&y<CH&&y<48){ctx.fillStyle='#5c9769';ctx.fillRect(x,y-1,.2,1);ctx.fillRect(x-1,y-2,.8,.5);ctx.fillRect(x+.3,y-3,.8,.5)}}
+ // player pixel sprite: head, hair, body, arms, legs and tool
+ const px=player.x,py=player.y;ctx.fillStyle='#252a30';ctx.fillRect(px+.35,py,.2,1);ctx.fillStyle='#e9b98e';ctx.fillRect(px+.65,py+.5,1.7,1.5);ctx.fillStyle='#53392c';ctx.fillRect(px+.55,py+.3,1.8,.55);ctx.fillStyle='#3d9b87';ctx.fillRect(px+.4,py+2,2.2,2);ctx.fillStyle='#e9b98e';ctx.fillRect(px+(player.facing>0?2.3:.1),py+2.3,.55,1.2);ctx.fillStyle='#31465d';ctx.fillRect(px+.55,py+4, .8,1.5);ctx.fillRect(px+1.65,py+4,.8,1.5);ctx.fillStyle='#252a30';ctx.fillRect(px+.4,py+5.4,1, .4);ctx.fillRect(px+1.6,py+5.4,1,.4);
+ ctx.fillStyle=tool==='flame'?'#ff9b46':'#aab9c2';let tx=player.facing>0?px+3:px-1;ctx.fillRect(tx,py+2.5,1.2,.25);if(tool==='flame'&&frame%5<3){ctx.fillStyle='#ff6b35';ctx.fillRect(tx+(player.facing>0?1:-.7),py+2.2,1,.8)}
+ // depth ruler
+ ctx.restore();document.getElementById('depth').textContent=Math.max(0,Math.floor(player.y-40)*2)+' m';document.getElementById('xy').textContent='X '+Math.floor(player.x)+' · Y '+Math.floor(player.y)}
+function updateUI(){document.getElementById('gold').textContent=gold;document.getElementById('sand').textContent=sandBag;document.getElementById('residue').textContent=residue;document.querySelectorAll('[data-tool]').forEach(b=>{b.classList.toggle('active',b.dataset.tool===tool);let t=b.dataset.tool;b.disabled=(t==='buildShaker'&&!unlocked.shaker)||(t==='buildBelt'&&!unlocked.belt)||((t==='flame')&&!unlocked.refine)});document.querySelectorAll('[data-buy]').forEach(b=>{let k=b.dataset.buy,cost=k==='shaker'?20:k==='belt'?30:50,u=unlocked[k];b.disabled=u||gold<cost;b.textContent=u?'Desbloqueado ✓':'Desbloquear · '+cost+' ouro'});document.getElementById('toolName').textContent=names[tool]||tool}
+function setTool(t){tool=t;updateUI();const hints={shovel:'Pá: escave areia e terra. O terreno é destrutível e a gravidade move os materiais.',pickaxe:'Picareta: extraia rocha, gelo, madeira e veios de ouro.',vacuum:'Vácuo: recolha materiais soltos e guarde-os no inventário.',bucket:'Balde: recolha água e despeje-a perto da areia para produzir areia molhada.',flame:'Lança-chamas: queima resíduo, derrete gelo e transforma água em vapor.',buildShaker:'Shaker: areia molhada gera resíduo e tem 25% de chance de gerar ouro.',buildBelt:'Esteira: transporta materiais para sua fábrica.',buildCollector:'Coletor: recolhe ouro que encosta na máquina.',erase:'Remova pixels ou máquinas.'};document.getElementById('hint').querySelector('b').textContent=names[t]+': ';document.getElementById('hint').childNodes[1].textContent=hints[t]||'Explore o mundo.'}
+function tick(){requestAnimationFrame(tick);if(!paused){frame++;movePlayer();if(frame%2===0)materialStep();if(frame%3===0)machineStep();if(frame%10===0)updateUI()}draw()}
+canvas.addEventListener('pointerdown',e=>{drag=true;canvas.setPointerCapture(e.pointerId);const p=coords(e);useTool(p.x,p.y)});canvas.addEventListener('pointermove',e=>{if(drag&&frame-lastAction>2){const p=coords(e);useTool(p.x,p.y);lastAction=frame}});canvas.addEventListener('pointerup',()=>drag=false);canvas.addEventListener('pointercancel',()=>drag=false);
 document.querySelectorAll('[data-tool]').forEach(b=>b.addEventListener('click',()=>setTool(b.dataset.tool)));
-document.querySelectorAll('[data-buy]').forEach(b=>b.addEventListener('click',()=>{const k=b.dataset.buy,cost=k==='shaker'?20:k==='belt'?30:50;if(gold<cost)return;if(k==='shaker')hasShaker=true;else if(k==='belt')hasBelt=true;else hasRefine=true;gold-=cost;note('Pesquisa concluída: '+(k==='shaker'?'Shaker':k==='belt'?'Logística':'Refinamento')+'.','good');updateUI()}));
-document.getElementById('pause').addEventListener('click',()=>{paused=!paused;document.getElementById('pause').textContent=paused?'▶ Continuar':'Ⅱ Pausar'});
-document.getElementById('reset').addEventListener('click',()=>{if(confirm('Gerar um mundo novo? O mundo atual será perdido.'))generate()});
-document.getElementById('clearFeed').addEventListener('click',()=>{logs=[];renderFeed()});
-document.getElementById('help').addEventListener('click',()=>note('Ciclo: areia + água → areia molhada → Shaker → ouro + resíduo. Queime o resíduo e deixe o resíduo queimado cair 25 células até a prensa.','good'));
-document.getElementById('toggleTools').addEventListener('click',()=>document.querySelector('.left-panel').classList.toggle('hide-mobile'));document.getElementById('toggleResearch').addEventListener('click',()=>document.querySelector('.right-panel').classList.toggle('show-mobile'));
-document.getElementById('mobileDig').addEventListener('click',()=>setTool('dig'));document.getElementById('mobileWater').addEventListener('click',()=>setTool('water'));document.getElementById('mobileGrab').addEventListener('click',()=>setTool('grab'));
-window.addEventListener('keydown',e=>{if(e.key>='1'&&e.key<='9')setTool(['dig','sand','water','grab','shaker','belt','burner','press','erase'][Number(e.key)-1]);if(e.code==='Space'&&e.target===document.body){e.preventDefault();paused=!paused;document.getElementById('pause').textContent=paused?'▶ Continuar':'Ⅱ Pausar'}});
-window.addEventListener('resize',resize);
-generate();setTool('dig');resize();updateUI();loop();
+document.querySelectorAll('[data-buy]').forEach(b=>b.addEventListener('click',()=>{let k=b.dataset.buy,cost=k==='shaker'?20:k==='belt'?30:50;if(gold<cost)return;gold-=cost;unlocked[k]=true;log('Pesquisa concluída: '+k+'.','good');updateUI()}));
+document.getElementById('pause').addEventListener('click',()=>{paused=!paused;document.getElementById('pause').textContent=paused?'▶ Continuar':'Ⅱ Pausar'});document.getElementById('reset').addEventListener('click',()=>{if(confirm('Gerar outro mundo?'))generate()});
+window.addEventListener('keydown',e=>{keys[e.key]=true;keys[e.key.toLowerCase()]=true;if(e.key>='1'&&e.key<='9')setTool(['shovel','pickaxe','vacuum','bucket','flame','buildShaker','buildBelt','buildCollector','erase'][+e.key-1]);if(['ArrowUp',' ','w','W'].includes(e.key)&&player.ground){player.vy=-2.8;player.ground=false}if(e.code==='Space'&&e.target===document.body){e.preventDefault()}});
+window.addEventListener('keyup',e=>{keys[e.key]=false;keys[e.key.toLowerCase()]=false});
+function hold(id,fn){let b=document.getElementById(id);b.addEventListener('pointerdown',e=>{e.preventDefault();fn(true)});b.addEventListener('pointerup',()=>fn(false));b.addEventListener('pointerleave',()=>fn(false));}
+hold('left',v=>{keys.ArrowLeft=v});hold('right',v=>{keys.ArrowRight=v});document.getElementById('jump').addEventListener('pointerdown',()=>{if(player.ground){player.vy=-2.8;player.ground=false}});document.getElementById('mine').addEventListener('click',()=>{let x=Math.floor(player.x+player.w/2+player.facing*3),y=Math.floor(player.y+2);useTool(x,y)});document.getElementById('toggleTools').addEventListener('click',()=>document.querySelector('.left').classList.toggle('hide'));
+window.addEventListener('resize',resize);generate();setTool('shovel');resize();tick();
 })();
-</script>
-</body>
-</html>
+</script></body></html>
