@@ -61,7 +61,7 @@ function generate(){CW=280;map=new Uint8Array(CW*CH);machines=new Uint8Array(CW*
  for(let x=61;x<78;x++)for(let y=37;y<42;y++)if(at(x,y)===E)set(x,y,WATER);
  for(let x=202;x<217;x++)for(let y=130;y<134;y++)if(at(x,y)===E)set(x,y,LAVA);
  player.x=22;player.y=31;player.vx=0;player.vy=0;player.health=100;camX=0;camY=0;gold=0;sandBag=0;waterBag=0;residue=0;unlocked={shaker:false,belt:false,refine:false};paused=false;logLines=[];log('Mundo procedural criado. Camadas: 5 terra, 10 areia e rocha abaixo.','good');updateUI()}
-function resize(){const r=view.getBoundingClientRect(),dpr=Math.min(window.devicePixelRatio||1,1.5);canvas.width=Math.max(1,Math.floor(r.width*dpr));canvas.height=Math.max(1,Math.floor(r.height*dpr));ctx.setTransform(dpr,0,0,dpr,0,0);screenW=r.width;screenH=r.height;scale=Math.min(screenH/125,screenW/190);scale=Math.max(1.25,Math.min(scale,2.7));offsetX=(screenW/scale-Math.floor(screenW/scale))/2;offsetY=0;draw()}
+function resize(){const r=view.getBoundingClientRect(),dpr=Math.min(window.devicePixelRatio||1,1.5);canvas.width=Math.max(1,Math.floor(r.width*dpr));canvas.height=Math.max(1,Math.floor(r.height*dpr));ctx.setTransform(dpr,0,0,dpr,0,0);screenW=r.width;screenH=r.height;scale=Math.min(screenH/62,screenW/100);scale=Math.max(2.8,Math.min(scale,6.2));offsetX=(screenW/scale-Math.floor(screenW/scale))/2;offsetY=0;draw()}
 function solid(v){return [SAND,SOIL,ROCK,WET,GOLD,RES,BURNT,ICE,WOOD].includes(v)}
 function collide(x,y){if(x<0||x>=CW||y>=CH)return true;if(y<0)return false;return solid(at(x,y))||machines[id(x,y)]!==0}
 function clearRect(x,y,w,h){for(let yy=Math.floor(y);yy<Math.ceil(y+h);yy++)for(let xx=Math.floor(x);xx<Math.ceil(x+w);xx++)if(collide(xx,yy))return false;return true}
