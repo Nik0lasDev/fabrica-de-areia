@@ -127,8 +127,10 @@ function machineStep(){
  for(let y=1;y<H-1;y++)for(let x=1;x<W-1;x++){const i=idx(x,y),m=machines[i];if(!m)continue;
   if(m===1){ // Shaker: only Wet Sand on top is processed; gold exits through the body.
    const top=idx(x,y-1);if(cells[top]===WET&&frame%9===0){
+    const below=idx(x,y+1),makesGold=Math.random()<.25;
+    if(makesGold&&(cells[below]!==EMPTY||machines[below]))continue;
     cells[top]=RESIDUE;produced++;
-    if(Math.random()<.25){const below=idx(x,y+1);if(cells[below]===EMPTY&&!machines[below]){cells[below]=GOLD;note('O Shaker extraiu ouro!','good')} }
+    if(makesGold){cells[below]=GOLD;note('O Shaker extraiu ouro!','good')}
     if(frame%45===0)note('Shaker processando areia molhada. Deixe uma saída lateral para o resíduo.');
    }
    // Built-in slow residue movement, in the facing direction (right).
