@@ -65,7 +65,7 @@ function resize(){const r=view.getBoundingClientRect(),dpr=Math.min(window.devic
 function solid(v){return [SAND,SOIL,ROCK,WET,GOLD,RES,BURNT,ICE,WOOD].includes(v)}
 function collide(x,y){if(x<0||x>=CW||y>=CH)return true;if(y<0)return false;return solid(at(x,y))||machines[id(x,y)]!==0}
 function clearRect(x,y,w,h){for(let yy=Math.floor(y);yy<Math.ceil(y+h);yy++)for(let xx=Math.floor(x);xx<Math.ceil(x+w);xx++)if(collide(xx,yy))return false;return true}
-function movePlayer(){player.vx=(keys.ArrowLeft||keys.a?-1:0)+(keys.ArrowRight||keys.d?1:0)+touchMove;if(player.vx)player.facing=Math.sign(player.vx);player.vx=Math.max(-2.2,Math.min(2.2,player.vx));player.vy=Math.min(3.2,player.vy+.13);
+function movePlayer(){player.vx=(keys.ArrowLeft||keys.a?-1:0)+(keys.ArrowRight||keys.d?1:0)+touchMove;if(player.vx)player.facing=Math.sign(player.vx);player.vx=Math.max(-1.35,Math.min(1.35,player.vx));player.vy=Math.min(3.2,player.vy+.13);
  let nx=player.x+player.vx;if(clearRect(nx,player.y,player.w,player.h))player.x=nx;else player.vx=0;
  let ny=player.y+player.vy;player.ground=false;if(clearRect(player.x,ny,player.w,player.h))player.y=ny;else{if(player.vy>0){player.ground=true;player.y=Math.floor(ny);while(!clearRect(player.x,player.y,player.w,player.h)&&player.y>0)player.y--;}player.vy=0}
  player.x=Math.max(1,player.x);if(player.x> CW-55)expandWorld();if(player.y>CH-10){player.y=CH-10;player.vy=0;player.ground=true}
@@ -106,10 +106,10 @@ canvas.addEventListener('pointerdown',e=>{drag=true;canvas.setPointerCapture(e.p
 document.querySelectorAll('[data-tool]').forEach(b=>b.addEventListener('click',()=>setTool(b.dataset.tool)));
 document.querySelectorAll('[data-buy]').forEach(b=>b.addEventListener('click',()=>{let k=b.dataset.buy,cost=k==='shaker'?20:k==='belt'?30:50;if(gold<cost)return;gold-=cost;unlocked[k]=true;log('Pesquisa concluída: '+k+'.','good');updateUI()}));
 document.getElementById('pause').addEventListener('click',()=>{paused=!paused;document.getElementById('pause').textContent=paused?'▶ Continuar':'Ⅱ Pausar'});document.getElementById('reset').addEventListener('click',()=>{if(confirm('Gerar outro mundo?'))generate()});
-window.addEventListener('keydown',e=>{keys[e.key]=true;keys[e.key.toLowerCase()]=true;if(e.key>='1'&&e.key<='9')setTool(['shovel','pickaxe','vacuum','bucket','flame','buildShaker','buildBelt','buildCollector','erase'][+e.key-1]);if(['ArrowUp',' ','w','W'].includes(e.key)&&player.ground){player.vy=-2.8;player.ground=false}if(e.code==='Space'&&e.target===document.body){e.preventDefault()}});
+window.addEventListener('keydown',e=>{keys[e.key]=true;keys[e.key.toLowerCase()]=true;if(e.key>='1'&&e.key<='9')setTool(['shovel','pickaxe','vacuum','bucket','flame','buildShaker','buildBelt','buildCollector','erase'][+e.key-1]);if(['ArrowUp',' ','w','W'].includes(e.key)&&player.ground){player.vy=-2.0;player.ground=false}if(e.code==='Space'&&e.target===document.body){e.preventDefault()}});
 window.addEventListener('keyup',e=>{keys[e.key]=false;keys[e.key.toLowerCase()]=false});
 function hold(id,fn){let b=document.getElementById(id);b.addEventListener('pointerdown',e=>{e.preventDefault();fn(true)});b.addEventListener('pointerup',()=>fn(false));b.addEventListener('pointerleave',()=>fn(false));}
-hold('left',v=>{keys.ArrowLeft=v});hold('right',v=>{keys.ArrowRight=v});document.getElementById('jump').addEventListener('pointerdown',()=>{if(player.ground){player.vy=-2.8;player.ground=false}});document.getElementById('mine').addEventListener('click',()=>{let x=Math.floor(player.x+player.w/2+player.facing*3),y=Math.floor(player.y+2);useTool(x,y)});document.getElementById('toggleTools').addEventListener('click',()=>document.querySelector('.left').classList.toggle('hide'));
+hold('left',v=>{keys.ArrowLeft=v});hold('right',v=>{keys.ArrowRight=v});document.getElementById('jump').addEventListener('pointerdown',()=>{if(player.ground){player.vy=-2.0;player.ground=false}});document.getElementById('mine').addEventListener('click',()=>{let x=Math.floor(player.x+player.w/2+player.facing*3),y=Math.floor(player.y+2);useTool(x,y)});document.getElementById('toggleTools').addEventListener('click',()=>document.querySelector('.left').classList.toggle('hide'));
 window.addEventListener('resize',resize);generate();setTool('shovel');resize();tick();
 })();
 </script></body></html>
