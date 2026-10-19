@@ -79,7 +79,11 @@ function materialStep(){const xStart=Math.max(0,Math.floor(camX)-8),xEnd=Math.mi
  }
  if(frame%60===0)for(let y=0;y<CH;y++)for(let x=xStart;x<xEnd;x++){const i=id(x,y);if(map[i]===STEAM)map[i]=WATER;}
 }
-function machineStep(){const xStart=Math.max(1,Math.floor(camX)-8),xEnd=Math.min(CW-1,Math.ceil(camX+screenW/scale)+8);for(let y=1;y<CH-1;y++)for(let x=xStart;x<xEnd;x++){const i=id(x,y),m=machines[i];if(!m)continue;if(m===1&&frame%8===0&&at(x,y-1)===WET){const makesGold=Math.random()<.25,below=at(x,y+1);set(x,y-1,RES);residue++;if(makesGold&&below===E&&!machines[id(x,y+1)]){set(x,y+1,GOLD);log('Shaker extraiu ouro.','good')}if(at(x+1,y-1)===E){set(x+1,y-1,RES);set(x,y-1,E)}}if(m===2&&frame%3===0&&solid(at(x-1,y))&&at(x,y)===E){set(x,y,at(x-1,y));set(x-1,y,E)}if(m===3&&at(x,y-1)===GOLD){gold++;set(x,y-1,E)}}}
+function machineStep(){const xStart=Math.max(1,Math.floor(camX)-8),xEnd=Math.min(CW-1,Math.ceil(camX+screenW/scale)+8);for(let y=1;y<CH-1;y++)for(let x=xStart;x<xEnd;x++){const i=id(x,y),m=machines[i];if(!m)continue;
+ if(m===1&&frame%8===0&&at(x,y-1)===WET){set(x,y-1,RES);residue++;if(Math.random()<.25&&at(x,y+1)===E&&!machines[id(x,y+1)]){set(x,y+1,GOLD);log('Shaker extraiu ouro.','good')}else log('Shaker processou areia molhada em resíduo.','good')}
+ if(m===2&&frame%3===0){const sourceX=x-1,destX=x+1;if(solid(at(sourceX,y))&&at(x,y)===E&&at(destX,y)===E&&!machines[id(destX,y)]){set(destX,y,at(sourceX,y));set(sourceX,y,E)}}
+ if(m===3&&at(x,y-1)===GOLD){gold++;set(x,y-1,E);log('Coletor recolheu ouro.','good')}
+}}
 function useTool(wx,wy){if(!ok(wx,wy))return;const dx=wx-(player.x+player.w/2),dy=wy-(player.y+player.h/2);if(Math.abs(dx)>8||Math.abs(dy)>7){log('Chegue mais perto para usar a ferramenta.');return}const i=id(wx,wy),v=map[i];
  if(tool==='vacuum'){
    const chosen=Number(document.getElementById('materialChoice').value);
@@ -94,8 +98,6 @@ function useTool(wx,wy){if(!ok(wx,wy))return;const dx=wx-(player.x+player.w/2),d
    }
  }else if(tool.startsWith('build')){
    if(v!==E||machines[i]){log('A posição precisa estar vazia.');return}
-   if(tool==='buildShaker'&&!unlocked.shaker){log('Pesquise o Shaker primeiro.');return}
-   if(tool==='buildBelt'&&!unlocked.belt){log('Pesquise Logística primeiro.');return}
    machines[i]=tool==='buildShaker'?1:tool==='buildBelt'?2:3;log(names[tool]+' colocado.','good')
  }
  updateUI();draw()}
@@ -157,7 +159,7 @@ function draw(){
  ctx.restore();
  document.getElementById('depth').textContent=Math.max(0,Math.floor(player.y-40)*2)+' m';document.getElementById('xy').textContent='X '+Math.floor(player.x)+' · Y '+Math.floor(player.y)
 }
-function updateUI(){document.getElementById('gold').textContent=gold;document.getElementById('sand').textContent=sandBag;document.getElementById('residue').textContent=residue;document.querySelectorAll('[data-tool]').forEach(b=>{b.classList.toggle('active',b.dataset.tool===tool);let t=b.dataset.tool;b.disabled=(t==='buildShaker'&&!unlocked.shaker)||(t==='buildBelt'&&!unlocked.belt)});document.querySelectorAll('[data-buy]').forEach(b=>{let k=b.dataset.buy,cost=k==='shaker'?20:k==='belt'?30:50,u=unlocked[k];b.disabled=u||gold<cost;b.textContent=u?'Desbloqueado ✓':'Desbloquear · '+cost+' ouro'});document.getElementById('toolName').textContent=names[tool]||tool;const choice=Number(document.getElementById('materialChoice').value);document.getElementById('inventoryCount').textContent='Inventário: '+(materialLabels[choice]||'Item')+' × '+countItem(choice);for(const option of document.getElementById('materialChoice').options){const v=Number(option.value);option.textContent=(materialLabels[v]||option.textContent).replace(/ × \d+$/,'')+' × '+countItem(v)}document.getElementById('modeToggle').textContent=throwMode?'Modo: Lançar':'Modo: Sugar'}
+function updateUI(){document.getElementById('gold').textContent=gold;document.getElementById('sand').textContent=sandBag;document.getElementById('residue').textContent=residue;document.querySelectorAll('[data-tool]').forEach(b=>{b.classList.toggle('active',b.dataset.tool===tool);let t=b.dataset.tool;b.disabled=false});document.querySelectorAll('[data-buy]').forEach(b=>{let k=b.dataset.buy,cost=k==='shaker'?20:k==='belt'?30:50,u=unlocked[k];b.disabled=u||gold<cost;b.textContent=u?'Desbloqueado ✓':'Desbloquear · '+cost+' ouro'});document.getElementById('toolName').textContent=names[tool]||tool;const choice=Number(document.getElementById('materialChoice').value);document.getElementById('inventoryCount').textContent='Inventário: '+(materialLabels[choice]||'Item')+' × '+countItem(choice);for(const option of document.getElementById('materialChoice').options){const v=Number(option.value);option.textContent=(materialLabels[v]||option.textContent).replace(/ × \d+$/,'')+' × '+countItem(v)}document.getElementById('modeToggle').textContent=throwMode?'Modo: Lançar':'Modo: Sugar'}
 function setTool(t){tool=t;updateUI();const hints={vacuum:'Escolha o material e alterne entre Sugar e Lançar. Toque em um bloco próximo para sugar o material selecionado ou escolha um espaço vazio para lançá-lo.',buildShaker:'Shaker: areia molhada gera resíduo e tem 25% de chance de gerar ouro.',buildBelt:'Esteira: transporta materiais para sua fábrica.',buildCollector:'Coletor: recolhe ouro que encosta na máquina.'};document.getElementById('hint').querySelector('b').textContent=names[t]+': ';document.getElementById('hint').childNodes[1].textContent=hints[t]||'Explore o mundo.'}
 function tick(){requestAnimationFrame(tick);if(!paused){frame++;movePlayer();if(frame%2===0)materialStep();if(frame%3===0)machineStep();if(frame%10===0)updateUI()}draw()}
 canvas.addEventListener('pointerdown',e=>{drag=true;canvas.setPointerCapture(e.pointerId);const p=coords(e);useTool(p.x,p.y)});canvas.addEventListener('pointermove',e=>{if(drag&&frame-lastAction>2){const p=coords(e);useTool(p.x,p.y);lastAction=frame}});canvas.addEventListener('pointerup',()=>drag=false);canvas.addEventListener('pointercancel',()=>drag=false);
