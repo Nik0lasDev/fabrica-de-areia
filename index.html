@@ -41,12 +41,15 @@ let camX=0,camY=0,scale=1,offsetX=0,offsetY=0,screenW=1,screenH=1,drag=false,las
 const id=(x,y)=>y*CW+x,ok=(x,y)=>x>=0&&x<CW&&y>=0&&y<CH,at=(x,y)=>ok(x,y)?map[id(x,y)]:ROCK,set=(x,y,v)=>{if(ok(x,y))map[id(x,y)]=v;};
 function log(s,kind=''){logLines.unshift({s,kind});logLines=logLines.slice(5);document.getElementById('logs').innerHTML=logLines.map(x=>'<div class="'+x.kind+'">'+x.s+'</div>').join('')}
 function seededRand(seed){let s=(seed>>>0)||1;return()=>((s=(s*1664525+1013904223)>>>0)/4294967296)}
+function createRiver(startX,endX,rng){if(endX-startX<24)return;let center= startX+5+Math.floor(rng()*8),drift=0,width=2+Math.floor(rng()*3),depth=2+Math.floor(rng()*3);for(let x=startX;x<endX;x++){if(x%7===0)drift=Math.max(-1,Math.min(1,drift+(rng()<.45?-1:1)));center=Math.max(startX+2,Math.min(endX-3,center+drift));if(rng()<.08)width=Math.max(2,Math.min(4,width+(rng()<.5?-1:1)));let surface=0;while(surface<CH-2&&at(x,surface)===E)surface++;if(surface>=CH-3)continue;for(let dx=-width;dx<=width;dx++){const xx=x+dx;if(!ok(xx,surface))continue;const edge=Math.abs(dx),bedDepth=Math.max(1,depth-(edge>width-1?1:0));for(let yy=surface;yy<Math.min(CH-2,surface+bedDepth);yy++)set(xx,yy,E);for(let yy=surface-1;yy<Math.min(CH-2,surface+bedDepth-1);yy++)if(ok(xx,yy))set(xx,yy,WATER);if(edge===width&&at(xx,surface)!==E)set(xx,surface,SOIL)}}}
 function generateColumn(x,rng){if(x===0)terrainSurface=40;terrainSurface+=Math.round((rng()-.5)*1.2);terrainSurface=Math.max(36,Math.min(45,terrainSurface));for(let y=terrainSurface;y<CH;y++){const d=y-terrainSurface;let v=d<5?SOIL:(d<15?SAND:ROCK);if(d>=15&&rng()<.0018)v=GOLD;set(x,y,v)}}
 function expandWorld(){
  const oldW=CW,newW=CW+CHUNK,oldMap=map,oldMachines=machines;map=new Uint8Array(newW*CH);machines=new Uint8Array(newW*CH);
  for(let y=0;y<CH;y++){map.set(oldMap.subarray(y*oldW,(y+1)*oldW),y*newW);machines.set(oldMachines.subarray(y*oldW,(y+1)*oldW),y*newW)}
  CW=newW;const rng=seededRand((worldId*7919+oldW*104729)>>>0);
  for(let x=oldW;x<newW;x++)generateColumn(x,rng);
+ // Novos trechos também podem conter rios naturais.
+ if(rng()<0.24)createRiver(oldW+3,newW-3,rng);
  // Rare gold pockets deeper underground; caves create exploration routes.
  for(let n=0;n<9;n++){const cx=oldW+Math.floor(rng()*CHUNK),cy=65+Math.floor(rng()*78),rx=3+Math.floor(rng()*6),ry=2+Math.floor(rng()*4);for(let y=cy-ry;y<=cy+ry;y++)for(let x=cx-rx;x<=cx+rx;x++)if(ok(x,y)&&((x-cx)**2/rx**2+(y-cy)**2/ry**2<1)&&rng()>.06)set(x,y,E)}
  for(let n=0;n<4;n++){const cx=oldW+Math.floor(rng()*CHUNK),cy=75+Math.floor(rng()*65);for(let k=0;k<3;k++)if(at(cx+k,cy)===ROCK)set(cx+k,cy,GOLD)}
@@ -54,6 +57,8 @@ function expandWorld(){
 }
 function generate(){CW=280;map=new Uint8Array(CW*CH);machines=new Uint8Array(CW*CH);const rng=seededRand(worldId++*928371);terrainSurface=40;
  for(let x=0;x<CW;x++)generateColumn(x,rng);
+ // Alguns mundos geram um rio sinuoso na superfície.
+ if(rng()<0.32)createRiver(38,CW-4,rng);
  // Underground cave pockets and rare gold veins.
  for(let n=0;n<28;n++){const cx=8+Math.floor(rng()*(CW-16)),cy=55+Math.floor(rng()*80),rx=3+Math.floor(rng()*8),ry=2+Math.floor(rng()*5);for(let y=cy-ry;y<=cy+ry;y++)for(let x=cx-rx;x<=cx+rx;x++)if(ok(x,y)&&((x-cx)**2/rx**2+(y-cy)**2/ry**2<1)&&rng()>.07)set(x,y,E)}
  for(let n=0;n<12;n++){const x=5+Math.floor(rng()*(CW-10)),y=65+Math.floor(rng()*78);for(let k=0;k<3;k++)if(at(x+k,y)===ROCK)set(x+k,y,GOLD)}
@@ -73,7 +78,7 @@ function movePlayer(){player.vx=(keys.ArrowLeft||keys.a?-1:0)+(keys.ArrowRight||
  camX=Math.max(0,Math.min(CW-screenW/scale,player.x+player.w/2-screenW/scale*.5));camY=Math.max(0,Math.min(CH-screenH/scale,player.y+player.h/2-screenH/scale*.53));
 }
 function materialStep(){const xStart=Math.max(0,Math.floor(camX)-8),xEnd=Math.min(CW,Math.ceil(camX+screenW/scale)+8);for(let y=CH-3;y>=0;y--)for(let n=0;n<xEnd-xStart;n++){let x=(frame%2)?xEnd-1-n:xStart+n,i=id(x,y),v=map[i];if(v===E||v===ROCK||v===WOOD||v===ICE||v===LAVA||v===STEAM)continue;
- if(v===SAND||v===SOIL){let waterAt=null;for(const [dx,dy] of [[0,-1],[1,0],[0,1],[-1,0]])if(at(x+dx,y+dy)===WATER){waterAt=[x+dx,y+dy];break}if(waterAt){set(x,y,WET);set(waterAt[0],waterAt[1],E);continue}}
+ if(v===SAND||v===SOIL){let waterAt=null;for(const [dx,dy] of [[0,-1],[1,0],[0,1],[-1,0]])if(at(x+dx,y+dy)===WATER){waterAt=[x+dx,y+dy];break}if(waterAt){set(x,y,WET);continue}}
  if(v===WATER||v===STEAM){let dirs=v===STEAM?[[0,-1],[-1,0],[1,0]]:[[0,1],[-1,0],[1,0]];for(const [dx,dy] of dirs){if(at(x+dx,y+dy)===E&&!machines[id(x+dx,y+dy)]){set(x+dx,y+dy,v);set(x,y,E);break}}}
  else if([SAND,SOIL,WET,GOLD,RES,BURNT].includes(v)){if(at(x,y+1)===E&&!machines[id(x,y+1)]){set(x,y+1,v);set(x,y,E)}else{const d=Math.random()<.5?-1:1;if(at(x+d,y+1)===E&&!machines[id(x+d,y+1)]){set(x+d,y+1,v);set(x,y,E)}else if(at(x-d,y+1)===E&&!machines[id(x-d,y+1)]){set(x-d,y+1,v);set(x,y,E)}}}
  }
