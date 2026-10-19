@@ -63,8 +63,9 @@ function generate(){CW=280;map=new Uint8Array(CW*CH);machines=new Uint8Array(CW*
  for(let n=0;n<28;n++){const cx=8+Math.floor(rng()*(CW-16)),cy=55+Math.floor(rng()*80),rx=3+Math.floor(rng()*8),ry=2+Math.floor(rng()*5);for(let y=cy-ry;y<=cy+ry;y++)for(let x=cx-rx;x<=cx+rx;x++)if(ok(x,y)&&((x-cx)**2/rx**2+(y-cy)**2/ry**2<1)&&rng()>.07)set(x,y,E)}
  for(let n=0;n<12;n++){const x=5+Math.floor(rng()*(CW-10)),y=65+Math.floor(rng()*78);for(let k=0;k<3;k++)if(at(x+k,y)===ROCK)set(x+k,y,GOLD)}
  for(let x=0;x<CW;x++){set(x,CH-1,ROCK);set(x,CH-2,ROCK)}
- // A small surface water pool and deep lava pocket.
- for(let x=61;x<78;x++)for(let y=37;y<42;y++)if(at(x,y)===E)set(x,y,WATER);
+ // Small surface pond follows the actual terrain height, avoiding floating water that looks like rain.
+ for(let x=61;x<78;x++){let surface=0;while(surface<CH-2&&at(x,surface)===E)surface++;if(surface>1&&at(x,surface-1)===E)set(x,surface-1,WATER)}
+ // Deep lava pocket.
  for(let x=202;x<217;x++)for(let y=130;y<134;y++)if(at(x,y)===E)set(x,y,LAVA);
  player.x=22;player.y=31;player.vx=0;player.vy=0;player.health=100;camX=0;camY=0;gold=0;sandBag=0;waterBag=0;residue=0;inventory={};throwMode=false;document.getElementById('modeToggle').textContent='Modo: Sugar';unlocked={shaker:false,belt:false,refine:false};paused=false;logLines=[];log('Mundo procedural criado. Camadas: 5 terra, 10 areia e rocha abaixo.','good');updateUI()}
 function resize(){const r=view.getBoundingClientRect(),dpr=Math.min(window.devicePixelRatio||1,1.5);canvas.width=Math.max(1,Math.floor(r.width*dpr));canvas.height=Math.max(1,Math.floor(r.height*dpr));ctx.setTransform(dpr,0,0,dpr,0,0);screenW=r.width;screenH=r.height;scale=Math.min(screenH/62,screenW/100);scale=Math.max(2.8,Math.min(scale,6.2));offsetX=(screenW/scale-Math.floor(screenW/scale))/2;offsetY=0;draw()}
