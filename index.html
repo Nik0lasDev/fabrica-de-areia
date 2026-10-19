@@ -43,19 +43,23 @@ function log(s,kind=''){logLines.unshift({s,kind});logLines=logLines.slice(5);do
 function seededRand(seed){let s=(seed>>>0)||1;return()=>((s=(s*1664525+1013904223)>>>0)/4294967296)}
 function createRiver(startX,endX,rng){
  if(endX-startX<24)return;
- // Rio com cerca de um décimo do comprimento anterior.
+ // Rio curto, aberto por cima e sem paredes de pedra até o céu.
  const riverLength=Math.max(24,Math.floor((endX-startX)/10));
  const center=Math.floor((startX+endX)/2);
  startX=Math.max(startX,center-Math.floor(riverLength/2));
  endX=Math.min(endX,startX+riverLength);
  const waterLine=40,depth=4+Math.floor(rng()*3),bottom=Math.min(CH-3,waterLine+depth);
  for(let x=startX;x<endX;x++){
-  for(let y=0;y<waterLine;y++)if(at(x,y)!==E)set(x,y,E);
+  let surface=0;
+  while(surface<CH-1&&at(x,surface)===E)surface++;
+  // Escava apenas a área do canal; preserva o terreno acima dele.
+  for(let y=surface;y<=bottom;y++)set(x,y,E);
   for(let y=waterLine;y<bottom;y++)set(x,y,WATER);
   set(x,bottom,ROCK);
  }
+ // Pequenas paredes nas pontas, somente ao redor da água.
  for(const x of [startX,endX-1]){
-  for(let y=0;y<=bottom;y++)set(x,y,ROCK);
+  for(let y=waterLine;y<=bottom;y++)set(x,y,ROCK);
  }
 }
 function generateColumn(x,rng){if(x===0)terrainSurface=40;terrainSurface+=Math.round((rng()-.5)*1.2);terrainSurface=Math.max(36,Math.min(45,terrainSurface));for(let y=terrainSurface;y<CH;y++){const d=y-terrainSurface;let v=d<5?SOIL:(d<15?SAND:ROCK);if(d>=15&&rng()<.0018)v=GOLD;set(x,y,v)}}
