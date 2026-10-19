@@ -43,18 +43,20 @@ function log(s,kind=''){logLines.unshift({s,kind});logLines=logLines.slice(5);do
 function seededRand(seed){let s=(seed>>>0)||1;return()=>((s=(s*1664525+1013904223)>>>0)/4294967296)}
 function createRiver(startX,endX,rng){
  if(endX-startX<24)return;
- // Calha escavada abaixo da superfície, com fundo e margens de terra para conter a água.
+ // Rio aberto: toda a calha é água, sem areia ou terra cobrindo o topo ou aparecendo no meio.
+ let center=startX+4+Math.floor(rng()*4),drift=0,width=2+Math.floor(rng()*2),depth=4+Math.floor(rng()*3);
  for(let x=startX;x<endX;x++){
-  let surface=0;while(surface<CH-2&&at(x,surface)===E)surface++;
-  if(surface>=CH-8)continue;
-  const depth=3+Math.floor(rng()*3);
-  // Escava o leito sem abrir a superfície inteira.
-  for(let y=surface;y<Math.min(CH-2,surface+depth);y++)set(x,y,E);
-  // A água ocupa somente os blocos inferiores; o nível fica abaixo das margens.
-  for(let y=surface+depth-2;y<surface+depth;y++)if(y>=surface&&ok(x,y))set(x,y,WATER);
-  // Reforça a borda superior para impedir que a água escape lateralmente.
-  if(x>startX&&at(x-1,surface)===E)set(x-1,surface,SOIL);
-  if(x<endX-1&&at(x+1,surface)===E)set(x+1,surface,SOIL);
+  if(x%8===0)drift=Math.max(-1,Math.min(1,drift+(rng()<.5?-1:1)));
+  center=Math.max(startX+2,Math.min(endX-3,center+drift));
+  if(rng()<.06)width=Math.max(2,Math.min(4,width+(rng()<.5?-1:1)));
+  for(let dx=-width;dx<=width;dx++){
+   const xx=x+dx;if(xx<startX||xx>=endX||!ok(xx,0))continue;
+   let surface=0;while(surface<CH-2&&at(xx,surface)===E)surface++;
+   if(surface>=CH-8)continue;
+   const edge=Math.abs(dx),channelDepth=Math.max(3,depth-(edge===width?1:0));
+   // Remove todos os blocos dentro da calha e preenche-a até à superfície com água.
+   for(let y=surface;y<Math.min(CH-2,surface+channelDepth);y++)set(xx,y,WATER);
+  }
  }
 }
 function generateColumn(x,rng){if(x===0)terrainSurface=40;terrainSurface+=Math.round((rng()-.5)*1.2);terrainSurface=Math.max(36,Math.min(45,terrainSurface));for(let y=terrainSurface;y<CH;y++){const d=y-terrainSurface;let v=d<5?SOIL:(d<15?SAND:ROCK);if(d>=15&&rng()<.0018)v=GOLD;set(x,y,v)}}
