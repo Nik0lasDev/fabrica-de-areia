@@ -43,16 +43,17 @@ function log(s,kind=''){logLines.unshift({s,kind});logLines=logLines.slice(5);do
 function seededRand(seed){let s=(seed>>>0)||1;return()=>((s=(s*1664525+1013904223)>>>0)/4294967296)}
 function createRiver(startX,endX,rng){
  if(endX-startX<24)return;
- // Canal horizontal claramente visível: água sem areia/terra por cima ou no interior.
+ // Rio com cerca de um décimo do comprimento anterior.
+ const riverLength=Math.max(24,Math.floor((endX-startX)/10));
+ const center=Math.floor((startX+endX)/2);
+ startX=Math.max(startX,center-Math.floor(riverLength/2));
+ endX=Math.min(endX,startX+riverLength);
  const waterLine=40,depth=4+Math.floor(rng()*3),bottom=Math.min(CH-3,waterLine+depth);
  for(let x=startX;x<endX;x++){
-  // Remove todo o terreno que ficaria acima da água dentro do canal.
   for(let y=0;y<waterLine;y++)if(at(x,y)!==E)set(x,y,E);
-  // Preenche o canal com água até uma altura uniforme e cria um fundo sólido.
   for(let y=waterLine;y<bottom;y++)set(x,y,WATER);
   set(x,bottom,ROCK);
  }
- // Margens verticais nas duas pontas impedem que a água escorra para fora do canal.
  for(const x of [startX,endX-1]){
   for(let y=0;y<=bottom;y++)set(x,y,ROCK);
  }
