@@ -72,7 +72,8 @@ function movePlayer(){player.vx=(keys.ArrowLeft||keys.a?-1:0)+(keys.ArrowRight||
  player.x=Math.max(1,player.x);if(player.x> CW-55)expandWorld();if(player.y>CH-10){player.y=CH-10;player.vy=0;player.ground=true}
  camX=Math.max(0,Math.min(CW-screenW/scale,player.x+player.w/2-screenW/scale*.5));camY=Math.max(0,Math.min(CH-screenH/scale,player.y+player.h/2-screenH/scale*.53));
 }
-function materialStep(){const xStart=Math.max(0,Math.floor(camX)-8),xEnd=Math.min(CW,Math.ceil(camX+screenW/scale)+8);for(let y=CH-3;y>=0;y--)for(let n=0;n<xEnd-xStart;n++){let x=(frame%2)?xEnd-1-n:xStart+n,i=id(x,y),v=map[i];if(v===E||v===ROCK||v===WOOD||v===ICE||v===LAVA||v===STEAM)continue;if(v===SAND||v===SOIL){let water=false;for(const [dx,dy] of [[0,-1],[1,0],[0,1],[-1,0]])if(at(x+dx,y+dy)===WATER){water=true;set(x,y,WET);set(x+dx,y+dy,WET);break}if(water)continue}
+function materialStep(){const xStart=Math.max(0,Math.floor(camX)-8),xEnd=Math.min(CW,Math.ceil(camX+screenW/scale)+8);for(let y=CH-3;y>=0;y--)for(let n=0;n<xEnd-xStart;n++){let x=(frame%2)?xEnd-1-n:xStart+n,i=id(x,y),v=map[i];if(v===E||v===ROCK||v===WOOD||v===ICE||v===LAVA||v===STEAM)continue;
+ if(v===SAND||v===SOIL){let waterAt=null;for(const [dx,dy] of [[0,-1],[1,0],[0,1],[-1,0]])if(at(x+dx,y+dy)===WATER){waterAt=[x+dx,y+dy];break}if(waterAt){set(x,y,WET);set(waterAt[0],waterAt[1],E);continue}}
  if(v===WATER||v===STEAM){let dirs=v===STEAM?[[0,-1],[-1,0],[1,0]]:[[0,1],[-1,0],[1,0]];for(const [dx,dy] of dirs){if(at(x+dx,y+dy)===E&&!machines[id(x+dx,y+dy)]){set(x+dx,y+dy,v);set(x,y,E);break}}}
  else if([SAND,SOIL,WET,GOLD,RES,BURNT].includes(v)){if(at(x,y+1)===E&&!machines[id(x,y+1)]){set(x,y+1,v);set(x,y,E)}else{const d=Math.random()<.5?-1:1;if(at(x+d,y+1)===E&&!machines[id(x+d,y+1)]){set(x+d,y+1,v);set(x,y,E)}else if(at(x-d,y+1)===E&&!machines[id(x-d,y+1)]){set(x-d,y+1,v);set(x,y,E)}}}
  }
